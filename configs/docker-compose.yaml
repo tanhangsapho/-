@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo.local
+    networks:
+      - sabay_docker
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: roots
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    build:
+      context: ../
+      dockerfile: ./dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - sabay_docker
+    volumes:
+      - ../src:/app/src
+networks:
+  sabay_docker:
+    external: true
